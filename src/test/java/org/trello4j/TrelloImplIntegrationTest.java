@@ -203,6 +203,15 @@ public class TrelloImplIntegrationTest {
 		assertEquals("Card should contain comments", 2, comments.size());
 	}
 
+	@Test
+	public void shouldManagerGMTInTimestamp() {
+		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+		List<Comment> comments = new TrelloImpl(API_KEY, API_TOKEN).getCommentsByCard(cardId);
+		assertEquals("Card should contain comments", 2, comments.size());
+	}
+
+
+
 
 	@Test
 	public void shouldHaveAttachments() {
