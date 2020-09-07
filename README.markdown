@@ -227,16 +227,5 @@ Now you got two options:
 
 ## Contributors
 
-[skydjol](https://github.com/skydjol)
-
-
-	
-
-	
-	
-
-
-
-
-
-
+[skydjol](https://github.com/skydjol)  
+[Damien Cuvillier](https://github.com/damiencuvillier)
