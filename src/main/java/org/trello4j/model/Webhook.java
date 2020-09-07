@@ -1,9 +1,5 @@
 package org.trello4j.model;
 
-import java.util.Date;
-import java.util.List;
-
-
 public class Webhook extends TrelloObject {
 
 	private String description;

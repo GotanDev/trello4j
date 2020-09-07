@@ -1,8 +1,6 @@
 package org.trello4j;
 
 import java.util.List;
-import java.util.Map;
-
 import org.trello4j.model.Webhook;
 
 /**

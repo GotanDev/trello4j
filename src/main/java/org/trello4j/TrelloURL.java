@@ -1,6 +1,9 @@
 package org.trello4j;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The Class TrelloURL.
  */
@@ -71,6 +74,7 @@ public class TrelloURL {
 	private static final String KEY_QUERY_PARAM = "?key=";
 	private static final String TOKEN_QUERY_PARAM = "&token=";
 	private static final String FILTER_QUERY_PARAM = "&filter=";
+	private static final String FILTER_ADDITIONNAL_PARAM_PREFIX = "&";
 
 	private final String[] pathParams;
 
@@ -82,9 +86,11 @@ public class TrelloURL {
 
 	private String[] filters = null;
 
+	private Map<String, String> additionnalParams = null;
 
-    public static TrelloURL create(String apiKey, String url,
-			String... pathParams) {
+
+	public static TrelloURL create(String apiKey, String url,
+	                               String... pathParams) {
 		return new TrelloURL(apiKey, url, pathParams);
 	}
 
@@ -104,6 +110,16 @@ public class TrelloURL {
 		return this;
 	}
 
+	public TrelloURL addAdditionalUrlParam(String paramName, String paramValue) {
+		if (paramName != null) {
+			if (this.additionnalParams == null) {
+				this.additionnalParams = new HashMap<String, String>();
+			}
+			this.additionnalParams.put(paramName, paramValue);
+		}
+		return this;
+	}
+
 	public String build() {
 		if (apiKey == null || url == null) {
 			throw new NullPointerException(
@@ -113,8 +129,22 @@ public class TrelloURL {
 		return new StringBuilder()
 				.append(createUrlWithPathParams())
 				.append(createAuthQueryString())
+				.append(createAdditionnalParamsQuery())
 				.append(createFilterQuery())
 				.toString();
+	}
+
+	private String createAdditionnalParamsQuery() {
+		String filterStr = "";
+		if (this.additionnalParams != null && !this.additionnalParams.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			for (String key : this.additionnalParams.keySet()) {
+				sb.append(FILTER_ADDITIONNAL_PARAM_PREFIX);
+				sb.append(key + "=" + this.additionnalParams.get(key));
+			}
+			filterStr = sb.toString();
+		}
+		return filterStr;
 	}
 
 	private String createFilterQuery() {
