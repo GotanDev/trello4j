@@ -1,38 +1,46 @@
 package org.trello4j;
 
 import com.google.gson.reflect.TypeToken;
-
-import org.trello4j.model.*;
-import org.trello4j.model.Board.Prefs;
-import org.trello4j.model.Card.Attachment;
-import org.trello4j.model.Checklist.CheckItem;
-
-import javax.net.ssl.HttpsURLConnection;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
+import javax.net.ssl.HttpsURLConnection;
+import org.trello4j.model.Action;
+import org.trello4j.model.Board;
+import org.trello4j.model.Board.Prefs;
+import org.trello4j.model.Card;
+import org.trello4j.model.Card.Attachment;
+import org.trello4j.model.Checklist;
+import org.trello4j.model.Checklist.CheckItem;
+import org.trello4j.model.Comment;
+import org.trello4j.model.Member;
+import org.trello4j.model.Notification;
+import org.trello4j.model.Organization;
+import org.trello4j.model.Token;
+import org.trello4j.model.Type;
+import org.trello4j.model.Webhook;
 
 /**
  * The Class TrelloImpl.
  */
 public class TrelloImpl implements Trello {
 
-    private static final String METHOD_DELETE   = "DELETE";
-    private static final String METHOD_GET      = "GET";
-    private static final String METHOD_POST     = "POST";
-    private static final String METHOD_PUT      = "PUT";
-	private static final String GZIP_ENCODING   = "gzip";
+	private static final String METHOD_DELETE = "DELETE";
+	private static final String METHOD_GET = "GET";
+	private static final String METHOD_POST = "POST";
+	private static final String METHOD_PUT = "PUT";
+	private static final String GZIP_ENCODING = "gzip";
 
 	private String apiKey = null;
 	private String token = null;
-	private TrelloObjectFactoryImpl trelloObjFactory = new TrelloObjectFactoryImpl();
+	private final TrelloObjectFactoryImpl trelloObjFactory = new TrelloObjectFactoryImpl();
 
 
 	public TrelloImpl(String apiKey) {
@@ -416,9 +424,23 @@ public class TrelloImpl implements Trello {
 		}, doGet(url));
 	}
 
+	@Override
+	public Card getCardWithAllField(final String cardId) {
+		validateObjectId(cardId);
+
+		final String url = TrelloURL
+				.create(apiKey, TrelloURL.CARD_URL, cardId)
+				.addAdditionalUrlParam("fields", "all")
+				.token(token)
+				.build();
+
+		return trelloObjFactory.createObject(new TypeToken<Card>() {
+		}, doGet(url));
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.trello4j.CardService#getActionsByCard(java.lang.String)
 	 */
 	@Override
@@ -545,6 +567,17 @@ public class TrelloImpl implements Trello {
 
 		return trelloObjFactory.createObject(new TypeToken<List<Member>>() {
 		}, doGet(url));
+	}
+
+	@Override
+	public List<Comment> getCommentsByCard(String cardId) {
+		List<Comment> list = new ArrayList<Comment>();
+		for (Action act : this.getActionsByCard(cardId)) {
+			if (act.getType().equals("commentCard")) {
+				list.add(new Comment(act));
+			}
+		}
+		return list;
 	}
 
 	@Override

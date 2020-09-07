@@ -1,12 +1,23 @@
 package org.trello4j;
 
-import org.junit.Test;
-import org.trello4j.model.*;
-import org.trello4j.model.Board.PERMISSION_TYPE;
-
 import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.trello4j.model.Action;
+import org.trello4j.model.Board;
+import org.trello4j.model.Board.PERMISSION_TYPE;
+import org.trello4j.model.Card;
+import org.trello4j.model.Checklist;
+import org.trello4j.model.Comment;
+import org.trello4j.model.Member;
+import org.trello4j.model.Notification;
+import org.trello4j.model.Organization;
+import org.trello4j.model.TrelloType;
+import org.trello4j.model.Type;
 
 
 /**
@@ -14,15 +25,15 @@ import static org.junit.Assert.*;
  */
 public class TrelloImplIntegrationTest {
 
-	private static final String API_KEY = "23ec668887f03d4c71c7f74fb0ae30a4";
-	private static final String API_TOKEN = "ede7758ace3911eb83585b15d9cbb14a02542e4556d14e7314d0e24228c578ae";
+	private static final String API_KEY = "***REMOVED***";
+	private static final String API_TOKEN = "***REMOVED***";
 
 	@Test(expected = TrelloException.class)
 	public void missingApiKey_shouldThrowException() {
 		new TrelloImpl(null);
 	}
 
-	@Test(expected=TrelloException.class)
+	@Test(expected = TrelloException.class)
 	public void testInvalidObjectId() {
 		// GIVEN		
 		String boardId = "INVALID_ID"; 
@@ -171,11 +182,11 @@ public class TrelloImplIntegrationTest {
 	@Test
 	public void shouldReturnCard() {
 		// GIVEN
-		String cardId = "4f6b93de58843df908f6266a";
-		
+		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+
 		// WHEN
 		Card card = new TrelloImpl(API_KEY, null).getCard(cardId);
-		
+
 		// THEN
 		assertNotNull("Oops, card is null", card);
 		assertEquals("Card id should be equal", cardId, card.getId());
@@ -186,13 +197,43 @@ public class TrelloImplIntegrationTest {
 	}
 
 	@Test
+	public void shouldReturnComments() {
+		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+		List<Comment> comments = new TrelloImpl(API_KEY, API_TOKEN).getCommentsByCard(cardId);
+		assertEquals("Card should contain comments", 2, comments.size());
+	}
+
+
+	@Test
+	public void shouldHaveAttachments() {
+		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+		List<Card.Attachment> attachments = new TrelloImpl(API_KEY, API_TOKEN).getAttachmentsByCard(cardId);
+		assertNotNull("Oops, card should contain comments", attachments);
+		assertEquals("Card should contain comments", 3, attachments.size());
+	}
+
+	@Test
+	public void shouldHaveCover() {
+		// GIVEN
+		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+
+		// WHEN
+		Card card = new TrelloImpl(API_KEY, null).getCardWithAllField(cardId);
+
+		// THEN
+		assertNotNull("Oops, card is null", card);
+		assertEquals("Card id should be equal", cardId, card.getId());
+	}
+
+
+	@Test
 	public void shouldReturnList() {
 		// GIVEN
-		String listId = "4e7b86d7ce194786721560b8";
-		
+		String listId = "5ee8d94991661381ea5632a6";
+
 		// WHEN
 		org.trello4j.model.List list = new TrelloImpl(API_KEY, null).getList(listId);
-		
+
 		// THEN
 		assertNotNull("Oops, list is null", list);
 		assertEquals("Card id should be equal", listId, list.getId());
