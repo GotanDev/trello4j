@@ -1,13 +1,11 @@
 package org.trello4j.gson;
 
-import java.lang.reflect.Type;
-
-import org.trello4j.model.Board.PERMISSION_TYPE;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import java.lang.reflect.Type;
+import org.trello4j.model.Board.PERMISSION_TYPE;
 
 /**
  * We need extra handling of permission types "public, organization, members"
