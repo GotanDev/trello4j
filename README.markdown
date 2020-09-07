@@ -10,23 +10,23 @@ Please report any issues and/or participate in the development [here](https://tr
 ### Get trello4j from unofficial maven repo
 
     <repository>
-	    <id>joelso-mvn-repo</id>
-	    <name>joelso github mvn repo</name>
-	    <url>https://raw.github.com/joelso/joelso-mvn-repo/master/snapshots/</url>
+	    <id>gotan-os</id>
+	    <name>Gotan OpenSource Contributions</name>
+	    <url>https://repository.dev.gotan.io/repository/gotan.os/</url>
 	</repository>
 	
 	...
 	
 	<dependency>
-	    <groupId>org.trello4j</groupId>
-		<artifactId>trello4j</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</dependency>
+      <groupId>com.kpitaine.connectors</groupId>
+      <artifactId>trello4j</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
 	
 
 ### Get source and build it
 
-    git clone git@github.com:joelso/trello4j.git
+    git clone git@github.com:damiencuvillier/trello4j.git
 	cd trello4j
 	mvn install
 
