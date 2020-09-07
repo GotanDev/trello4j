@@ -5,17 +5,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.trello4j.gson.PermissionTypeDeserializer;
-import org.trello4j.gson.TrelloTypeDeserializer;
-import org.trello4j.model.Board.PERMISSION_TYPE;
-import org.trello4j.model.TrelloType;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
+import org.trello4j.gson.PermissionTypeDeserializer;
+import org.trello4j.gson.TrelloTypeDeserializer;
+import org.trello4j.model.Board.PERMISSION_TYPE;
+import org.trello4j.model.TrelloType;
 
 /**
  * The Class TrelloObjectFactoryImpl.
@@ -88,7 +87,7 @@ public class TrelloObjectFactoryImpl {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> T unmarshallToObj(TypeToken<T> typeToken, JsonElement response) {
-		return (T) getGson().fromJson(response, typeToken.getType());
+		return getGson().fromJson(response, typeToken.getType());
 	}
 
 	/**
