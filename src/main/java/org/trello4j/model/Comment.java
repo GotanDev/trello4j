@@ -36,7 +36,6 @@ public class Comment {
 	public void setAuthor(Member author) {
 		this.author = author;
 	}
-
 	public Date getDate() {
 		return date;
 	}

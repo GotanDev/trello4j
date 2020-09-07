@@ -2,15 +2,23 @@ package org.trello4j;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import org.trello4j.gson.PermissionTypeDeserializer;
 import org.trello4j.gson.TrelloTypeDeserializer;
 import org.trello4j.model.Board.PERMISSION_TYPE;
@@ -22,7 +30,7 @@ import org.trello4j.model.TrelloType;
 public class TrelloObjectFactoryImpl {
 
 	private static final Charset UTF_8_CHAR_SET = Charset.forName("UTF-8");
-	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 	private final JsonParser parser = new JsonParser();
 
@@ -30,13 +38,10 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Creates the object.
-	 * 
-	 * @param <T>
-	 *            the generic type
-	 * @param typeToken
-	 *            the type token
-	 * @param jsonContent
-	 *            the json content
+	 *
+	 * @param <T>         the generic type
+	 * @param typeToken   the type token
+	 * @param jsonContent the json content
 	 * @return the t
 	 */
 	@SuppressWarnings("unchecked")
@@ -49,7 +54,7 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Unmarshall to json.
-	 * 
+	 *
 	 * @param jsonContent
 	 *            the json content
 	 * @return the json element
@@ -76,7 +81,7 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Unmarshall to obj.
-	 * 
+	 *
 	 * @param <T>
 	 *            the generic type
 	 * @param typeToken
@@ -92,13 +97,14 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Gets the gson.
-	 * 
+	 *
 	 * @return the gson
 	 */
-	private Gson getGson() {
+	public Gson getGson() {
 		if (gson == null) {
 			gson = new GsonBuilder()
 					.setDateFormat(DATE_FORMAT)
+					.registerTypeAdapter(Date.class, new DateDeserializer())
 					.registerTypeAdapter(
 							PERMISSION_TYPE.class,
 							new PermissionTypeDeserializer())
@@ -112,7 +118,7 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Close stream.
-	 * 
+	 *
 	 * @param is
 	 *            the is
 	 */
@@ -128,13 +134,27 @@ public class TrelloObjectFactoryImpl {
 
 	/**
 	 * Checks if is list.
-	 * 
-	 * @param typeToken
-	 *            the type token
+	 *
+	 * @param typeToken the type token
 	 * @return true, if is list
 	 */
 	private boolean isList(TypeToken typeToken) {
 		return List.class.isAssignableFrom(typeToken.getRawType());
+	}
+
+	class DateDeserializer implements JsonDeserializer<Date> {
+
+		@Override
+		public Date deserialize(JsonElement element, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
+			String date = element.getAsString();
+			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+			format.setTimeZone(TimeZone.getTimeZone("GMT"));
+			try {
+				return format.parse(date);
+			} catch (ParseException exp) {
+				return null;
+			}
+		}
 	}
 
 }

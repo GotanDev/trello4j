@@ -182,10 +182,10 @@ public class TrelloImplIntegrationTest {
 	@Test
 	public void shouldReturnCard() {
 		// GIVEN
-		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+		String cardId = "5f1fef4283d439258f1eeb20";
 
 		// WHEN
-		Card card = new TrelloImpl(API_KEY, null).getCard(cardId);
+		Card card = new TrelloImpl(API_KEY, API_TOKEN).getCard(cardId);
 
 		// THEN
 		assertNotNull("Oops, card is null", card);
@@ -204,14 +204,11 @@ public class TrelloImplIntegrationTest {
 	}
 
 	@Test
-	public void shouldManagerGMTInTimestamp() {
-		String cardId = "5ee8d95b5d3f9e31d2011cf0";
+	public void checkGMTTimezoneTime() {
+		String cardId = "5f1fef4283d439258f1eeb20";
 		List<Comment> comments = new TrelloImpl(API_KEY, API_TOKEN).getCommentsByCard(cardId);
-		assertEquals("Card should contain comments", 2, comments.size());
+		assertEquals("Card timezone is not right converted", 1599474166777L, comments.get(0).getDate().getTime());
 	}
-
-
-
 
 	@Test
 	public void shouldHaveAttachments() {
