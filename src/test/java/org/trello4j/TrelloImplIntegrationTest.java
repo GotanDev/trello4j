@@ -26,7 +26,7 @@ import org.trello4j.model.Type;
 public class TrelloImplIntegrationTest {
 
 	private static final String API_KEY = "***REMOVED***";
-	private static final String API_TOKEN = "***REMOVED***";
+	private static final String API_TOKEN = "Add Your Dev Key Here to allow tests";
 
 	@Test(expected = TrelloException.class)
 	public void missingApiKey_shouldThrowException() {
