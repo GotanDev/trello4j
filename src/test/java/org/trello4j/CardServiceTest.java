@@ -29,8 +29,9 @@ public class CardServiceTest {
 
     @Test
 	public void testCreateCard() {
-        // GIVEN
-        String listId = "4f82ed4f1903bae43e66f5fd";
+		/* Choses à faire */
+		String listId = "5f1fef4213e3070db56cb6a3";
+
 		String name = "Trello4J CardService: Add Card using POST";
 		String description = "Something awesome happened :)";
 
