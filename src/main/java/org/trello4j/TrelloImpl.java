@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import javax.net.ssl.HttpsURLConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trello4j.model.Action;
 import org.trello4j.model.Board;
 import org.trello4j.model.Board.Prefs;
@@ -1244,7 +1244,40 @@ public class TrelloImpl implements Trello {
 		Map<String, String> jsonContent = Maps.newHashMap();
 		jsonContent.put("idList", listId);
 		return trelloObjFactory.createObject(
-			new TypeToken<Card>() {},
+			new TypeToken<Card>() {
+			},
+			doPut(url, jsonContent)
+		);
+	}
+
+	@Override
+	public Card archiveCard(String cardId) {
+		final String url = TrelloURL
+			.create(apiKey, TrelloURL.CARD_URL, cardId)
+			.token(token)
+			.build();
+
+		Map<String, String> jsonContent = Maps.newHashMap();
+		jsonContent.put("closed", "true");
+		return trelloObjFactory.createObject(
+			new TypeToken<Card>() {
+			},
+			doPut(url, jsonContent)
+		);
+	}
+
+	@Override
+	public Card restoreCard(String cardId) {
+		final String url = TrelloURL
+			.create(apiKey, TrelloURL.CARD_URL, cardId)
+			.token(token)
+			.build();
+
+		Map<String, String> jsonContent = Maps.newHashMap();
+		jsonContent.put("closed", "false");
+		return trelloObjFactory.createObject(
+			new TypeToken<Card>() {
+			},
 			doPut(url, jsonContent)
 		);
 	}

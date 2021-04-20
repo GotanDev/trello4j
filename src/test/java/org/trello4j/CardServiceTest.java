@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
@@ -52,8 +53,8 @@ public class CardServiceTest {
     	/* "En cours" */
     	String oldListId = "5f1fef42ad7af91a4a3cd135";
     	/* Choses à faire */
-    	String newListId = "5f1fef4213e3070db56cb6a3";
-    	/* "TEST jUnit move Card" */
+		String newListId = "5f1fef4213e3070db56cb6a3";
+		/* "TEST jUnit move Card" */
 		String cardId = "607eebf9d588260ae096d3c6";
 
 		Card c = new TrelloImpl(API_KEY, API_TOKEN)
@@ -62,9 +63,28 @@ public class CardServiceTest {
 		assertEquals(newListId, c.getIdList());
 
 		// Go Back to previous list
-		new TrelloImpl(API_KEY, API_TOKEN)
+		c = new TrelloImpl(API_KEY, API_TOKEN)
 			.moveCardToList(cardId, oldListId);
 
+		assertEquals(oldListId, c.getIdList());
+	}
 
+
+	@Test
+	public void testArchiveCard() {
+		/* "TEST jUnit move Card" */
+		String cardId = "607eebf9d588260ae096d3c6";
+
+		Card c = new TrelloImpl(API_KEY, API_TOKEN)
+			.archiveCard(cardId);
+
+		assertTrue(c.isClosed());
+
+
+		// Go Back to previous list
+		c = new TrelloImpl(API_KEY, API_TOKEN)
+			.restoreCard(cardId);
+
+		assertTrue(!c.isClosed());
 	}
 }

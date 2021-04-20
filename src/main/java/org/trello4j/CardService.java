@@ -38,12 +38,28 @@ public interface CardService {
 
 	Card getCardWithAllField(String cardId);
 
-	/** Move a specific card to a different card list
+	/**
+	 * Move a specific card to a different card list
 	 *
 	 * @param cardId
 	 * @param listId
 	 */
 	Card moveCardToList(String cardId, String listId);
+
+	/**
+	 * Archive Card
+	 *
+	 * @param cardId
+	 */
+	Card archiveCard(String cardId);
+
+
+	/**
+	 * Un-Archive Card
+	 *
+	 * @param cardId
+	 */
+	Card restoreCard(String cardId);
 
 	/**
 	 * Add a new {@link Card} with the optional keyValue pairs.
@@ -54,4 +70,5 @@ public interface CardService {
 	 * @param keyValeMap Map of the optional key-value-pairs.
 	 */
 	Card createCard(String idList, String name, Map<String, String> keyValeMap);
+
 }
