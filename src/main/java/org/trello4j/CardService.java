@@ -38,6 +38,13 @@ public interface CardService {
 
 	Card getCardWithAllField(String cardId);
 
+	/** Move a specific card to a different card list
+	 *
+	 * @param cardId
+	 * @param listId
+	 */
+	Card moveCardToList(String cardId, String listId);
+
 	/**
 	 * Add a new {@link Card} with the optional keyValue pairs.
 	 *

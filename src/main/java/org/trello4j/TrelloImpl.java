@@ -1,11 +1,16 @@
 package org.trello4j;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +36,11 @@ import org.trello4j.model.Webhook;
  * The Class TrelloImpl.
  */
 public class TrelloImpl implements Trello {
+
+
+
+	/** SLF4J class context logger */
+	private static final Logger logger = LoggerFactory.getLogger(TrelloImpl.class);
 
 	private static final String METHOD_DELETE = "DELETE";
 	private static final String METHOD_GET = "GET";
@@ -1224,12 +1234,27 @@ public class TrelloImpl implements Trello {
 		}, doGet(url));
 	}
 
+	@Override
+	public Card moveCardToList(String cardId, String listId) {
+		final String url = TrelloURL
+			.create(apiKey, TrelloURL.CARD_URL,cardId)
+			.token(token)
+			.build();
+
+		Map<String, String> jsonContent = Maps.newHashMap();
+		jsonContent.put("idList", listId);
+		return trelloObjFactory.createObject(
+			new TypeToken<Card>() {},
+			doPut(url, jsonContent)
+		);
+	}
+
 	private InputStream doGet(String url) {
 		return doRequest(url, METHOD_GET);
 	}
 
-	private InputStream doPut(String url) {
-		return doRequest(url, METHOD_PUT);
+	private InputStream doPut(String url, Map<String, String> map) {
+		return doRequest(url, METHOD_PUT, map);
 	}
 
 	private InputStream doPost(String url, Map<String, String> map) {
@@ -1252,21 +1277,16 @@ public class TrelloImpl implements Trello {
 	 */
 	private InputStream doRequest(String url, String requestMethod, Map<String, String> map) {
 		try {
-			HttpsURLConnection conn = (HttpsURLConnection) new URL(url)
-					.openConnection();
+			HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
 			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-            conn.setDoOutput(requestMethod.equals(METHOD_POST) || requestMethod.equals(METHOD_PUT));
             conn.setRequestMethod(requestMethod);
+            if (requestMethod.equals(METHOD_POST) || requestMethod.equals(METHOD_PUT)) {
+            	conn.setRequestProperty("Content-Type", "application/json");
+            	conn.setDoOutput(true);
+			}
 
             if(map != null && !map.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (String key : map.keySet()) {
-                    sb.append(sb.length() > 0 ? "&" : "")
-                        .append(key)
-                        .append("=")
-                        .append(URLEncoder.encode(map.get(key), "UTF-8"));
-                }
-                conn.getOutputStream().write(sb.toString().getBytes());
+                conn.getOutputStream().write(serializeMapToJson(map).getBytes(StandardCharsets.UTF_8));
                 conn.getOutputStream().close();
             }
 
@@ -1306,5 +1326,17 @@ public class TrelloImpl implements Trello {
 		} else {
 			return new BufferedInputStream(is);
 		}
+	}
+
+	private String serializeMapToJson(Map<String, String> jsonMap) {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		try {
+			String json = objectMapper.writeValueAsString(jsonMap);
+			return json;
+		} catch (JsonProcessingException e) {
+			logger.error("Unable to serialize a map to JSON {}", e.getMessage());
+		}
+		return null;
 	}
 }
