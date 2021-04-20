@@ -607,6 +607,28 @@ public class TrelloImpl implements Trello {
 		}, doPost(url, keyValueMap));
 	}
 
+	@Override
+	public void addMemberToCard(String cardId, String memberId) {
+		final String url = TrelloURL
+			.create(apiKey, TrelloURL.CARD_MEMBERS_URL,cardId)
+			.token(token)
+			.build();
+
+		Map<String, String> jsonContent = Maps.newHashMap();
+		jsonContent.put("value", memberId);
+		doPost(url, jsonContent);
+	}
+
+	@Override
+	public void removeMemberFromCard(String cardId, String memberId) {
+		final String url = TrelloURL
+			.create(apiKey, TrelloURL.CARD_MEMBERS_DELETE_URL,cardId, memberId)
+			.token(token)
+			.build();
+
+		doDelete(url);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *

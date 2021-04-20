@@ -70,5 +70,17 @@ public interface CardService {
 	 * @param keyValeMap Map of the optional key-value-pairs.
 	 */
 	Card createCard(String idList, String name, Map<String, String> keyValeMap);
+	/** Add a member on card
+	 *
+	 * @param cardId
+	 * @param memberId
+	 */
+	void addMemberToCard(String cardId, String memberId);
 
+	/** Remove memberfromCard
+	 *
+	 * @param cardId
+	 * @param memberId
+	 */
+	void removeMemberFromCard(String cardId, String memberId);
 }

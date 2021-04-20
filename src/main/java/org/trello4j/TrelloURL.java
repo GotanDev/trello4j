@@ -43,6 +43,7 @@ public class TrelloURL {
 	public static final String CARD_CHECKLISTS_URL = "https://api.trello.com/1/cards/{0}/checklists";
 	public static final String CARD_LIST_URL = "https://api.trello.com/1/cards/{0}/list";
 	public static final String CARD_MEMBERS_URL = "https://api.trello.com/1/cards/{0}/members";
+	public static final String CARD_MEMBERS_DELETE_URL = "https://api.trello.com/1/cards/{0}/idMembers/{1}";;
 	public static final String CARD_POST_URL = "https://api.trello.com/1/cards";
 	public static final String LIST_ACTIONS_URL = "https://api.trello.com/1/lists/{0}/action";
 	public static final String LIST_BOARD_URL = "https://api.trello.com/1/lists/{0}/board";
@@ -69,6 +70,7 @@ public class TrelloURL {
 	public static final String TOKEN_WEBHOOKS_URL = "https://api.trello.com/1/tokens/{0}/webhooks";
 	public static final String WEBHOOKS_URL = "https://api.trello.com/1/webhooks/";
 	public static final String WEBHOOKS_ID_URL = "https://api.trello.com/1/webhooks/{0}";
+
 	private static final String PATH_PARAM_ARG_PREFIX = "\\{";
 	private static final String PATH_PARAM_ARG_SUFFIX = "\\}";
 	private static final String KEY_QUERY_PARAM = "?key=";
@@ -170,9 +172,9 @@ public class TrelloURL {
 
 	private String createUrlWithPathParams() {
 		if (pathParams == null || pathParams.length == 0) return url;
-		String compiledUrl = null;
+		String compiledUrl = url;
 		for (int i = 0; i < pathParams.length; i++) {
-			compiledUrl = url.replaceAll(PATH_PARAM_ARG_PREFIX + i
+			compiledUrl = compiledUrl.replaceAll(PATH_PARAM_ARG_PREFIX + i
 					+ PATH_PARAM_ARG_SUFFIX, pathParams[i]);
 		}
 		// boardUrl += authQueryString;
