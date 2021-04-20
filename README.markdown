@@ -105,7 +105,7 @@ Now you got two options:
 <tr><td>PUT /1/cards/[card_id]/closed                      </td><td>TODO</td></tr>
 <tr><td>PUT /1/cards/[card_id]/desc                        </td><td>TODO</td></tr>
 <tr><td>PUT /1/cards/[card_id]/due                         </td><td>TODO</td></tr>
-<tr><td>PUT /1/cards/[card_id]/idList                      </td><td>TODO</td></tr>
+<tr><td>PUT /1/cards/[card_id]                      	   </td><td>IN PROGRESS</td></tr>
 <tr><td>PUT /1/cards/[card_id]/name                        </td><td>TODO</td></tr>
 <tr><td>POST /1/cards                                      </td><td>IMPLEMENTED</td></tr>
 <tr><td>POST /1/cards/[card_id]/actions/comments           </td><td>TODO</td></tr>
