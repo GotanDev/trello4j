@@ -20,6 +20,10 @@ public class Card extends TrelloObject {
 	private List<Label> labels;
 	private String url;
 	private double pos;
+	private Boolean dueComplete;
+	private String start;
+	private String due;
+	private List<String> idChecklists;
 
     public String getName() {
 		return name;
@@ -108,6 +112,18 @@ public class Card extends TrelloObject {
 	public void setLabels(List<Label> labels) {
 		this.labels = labels;
 	}
+
+	public Boolean getDueComplete() { return dueComplete; }
+
+	public void setDueComplete(Boolean dueComplete) { this.dueComplete = dueComplete; }
+
+	public String getStart() { return start; }
+
+	public void setStart(String start) { this.start = start; }
+
+	public String getDue() { return due; }
+
+	public void setDue(String due) { this.due = due; }
 
 	public class Attachment {
 
