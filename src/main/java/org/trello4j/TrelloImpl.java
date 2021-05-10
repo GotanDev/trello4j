@@ -1304,6 +1304,21 @@ public class TrelloImpl implements Trello {
 		);
 	}
 
+	@Override
+	public CheckItem updateChecklist(String cardId, String checkitemId, String state) {
+		final String url = TrelloURL
+				.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_CHECKITEM_URL, cardId, checkitemId)
+				.token(token)
+				.build();
+
+		Map<String, String> jsonContent = Maps.newHashMap();
+		jsonContent.put("state", state);
+		return trelloObjFactory.createObject(
+				new TypeToken<CheckItem>() {},
+				doPut(url, jsonContent)
+		);
+	}
+
 	private InputStream doGet(String url) {
 		return doRequest(url, METHOD_GET);
 	}

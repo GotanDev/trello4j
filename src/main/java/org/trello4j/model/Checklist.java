@@ -1,6 +1,7 @@
 package org.trello4j.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,18 +79,26 @@ public class Checklist extends TrelloObject {
 		this.idCard = idCard;
 	}
 
-	public class CheckItem extends TrelloObject {
+	public class CheckItem {
 
+		private String _id;
 		private String name;
         private String type;
         private String state;
         private String idChecklist;
+		private double pos;
 
         /* Need to upgrade to Business Class
         private String due;
         private String idMember */
 
-        private double pos;
+		public String get_id() {
+			return _id;
+		}
+
+		public void set_id(String _id) {
+			this._id = _id;
+		}
 
         public String getName() {
 			return name;

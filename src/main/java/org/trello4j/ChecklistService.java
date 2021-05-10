@@ -48,4 +48,13 @@ public interface ChecklistService {
 	 * @return the check items by checklist
 	 */
 	java.util.List<CheckItem> getCheckItemsByChecklist(String checklistId);
+
+	/**
+	 * Change a state to a specific checkItem
+	 *
+	 * @param cardId The card who contains checkitem
+	 * @param checkitemId The checkitem id
+	 * @param state The state of the checkitem (incomplete or complete)
+	 */
+	CheckItem updateChecklist(String cardId, String checkitemId, String state);
 }
