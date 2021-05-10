@@ -79,9 +79,8 @@ public class Checklist extends TrelloObject {
 		this.idCard = idCard;
 	}
 
-	public class CheckItem {
+	public class CheckItem extends TrelloObject {
 
-		private String _id;
 		private String name;
         private String type;
         private String state;
@@ -91,14 +90,6 @@ public class Checklist extends TrelloObject {
         /* Need to upgrade to Business Class
         private String due;
         private String idMember */
-
-		public String get_id() {
-			return _id;
-		}
-
-		public void set_id(String _id) {
-			this._id = _id;
-		}
 
         public String getName() {
 			return name;
